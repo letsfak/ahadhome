@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AHAD — Anket & Tahmini Fiyat</title>
+<style>
+  :root{--bg:#0f1216;--panel:#171b22;--ink:#f2f4f7;--ink2:#cfd6df;--acc:#f0b877;--mut:#8a94a6;}
+  *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0c1116,#141a22);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+  .wrap{max-width:980px;margin:24px auto;padding:24px} .hero{padding:28px 20px 8px;text-align:center}
+  h1{font-size:40px;letter-spacing:.6px;margin:0 0 6px;text-transform:uppercase}
+  h1 .thin{font-weight:300;color:var(--ink2)} h2{margin:18px 0 8px;font-size:20px;color:var(--ink2)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+  .panel{grid-column:1/-1;background:var(--panel);border:1px solid #202631;border-radius:14px;padding:18px 16px}
+  .col-6{grid-column:span 6} .col-4{grid-column:span 4} .col-12{grid-column:1/-1}
+  label{display:block;font-size:14px;color:var(--ink2);margin:4px 0 6px}
+  input[type="number"],input[type='text'],select{width:100%;background:#0d1117;color:var(--ink);border:1px solid #2a3340;border-radius:10px;padding:12px}
+  .checks{display:flex;flex-wrap:wrap;gap:10px} .chip{background:#0d1117;border:1px solid #2a3340;border-radius:999px;padding:10px 14px;cursor:pointer}
+  .chip input{display:none} .chip.active{border-color:var(--acc);box-shadow:0 0 0 2px rgba(240,184,119,.3) inset}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+  .btn{appearance:none;border:0;border-radius:10px;padding:12px 16px;font-weight:600;cursor:pointer; transition: background-color 0.3s;}
+  .btn.primary{background:var(--acc);color:#111} .btn.primary:disabled{background:var(--mut); color:var(--ink2); cursor:not-allowed;}
+  .est{background:linear-gradient(180deg,#111822,#0f141c);border:1px solid #253141;border-radius:14px;padding:18px}
+  .big{font-size:28px;font-weight:800;color:white} .mut{color:var(--mut)}
+  .disclaimer{font-size:12px;color:var(--mut)}
+  @media (max-width:760px){.col-6,.col-4{grid-column:1/-1} h1{font-size:28px}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>TEK ADRES — <span class="thin">TÜM ÇÖZÜMLER</span></h1>
+      <div class="mut">60 saniyede formu doldurun • tahmini fiyat aralığını anında öğrenin • ücretsiz keşif randevusu alın</div>
+    </div>
+
+    <div class="grid panel">
+      <div class="col-6">
+        <label>Dairenin durumu</label>
+        <select id="status">
+          <option>Teslim aldım</option>
+          <option>1–3 ay içinde</option>
+          <option>3–6 ay içinde</option>
+          <option>6+ ay</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label>Mevcut durum</label>
+        <select id="condition">
+          <option value="white">Tadilat yapılmamış / White-box</option>
+          <option value="shell">Kara sıva</option>
+          <option value="reno">Tamamen tadilatlı (Yenileme)</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label>Toplam alan (m²)</label>
+        <input type="number" id="area" placeholder="m²" value="90" min="20" max="500"/>
+      </div>
+      <div class="col-6">
+        <label>Oda sayısı</label>
+        <select id="rooms">
+          <option>Stüdyo</option><option>1</option><option selected>2</option><option>3</option><option>4+</option>
+        </select>
+      </div>
+      <div class="col-12"><label>İstenen hizmetler (birden çok seçilebilir)</label></div>
+      <div class="col-12 checks" id="services">
+        <label class="chip"><input type="checkbox" value="Tasarım"/>Tasarım</label>
+        <label class="chip active"><input type="checkbox" value="İnşaat / Tadilat" checked/>İnşaat / Tadilat</label>
+        <label class="chip"><input type="checkbox" value="Mobilya"/>Mobilya</label>
+        <label class="chip"><input type="checkbox" value="Kurulum"/>Kurulum</label>
+      </div>
+      <div class="col-6">
+        <label>Kalite seviyesi</label>
+        <select id="tier">
+          <option value="Ekonomi">Ekonomi</option>
+          <option value="Standart" selected>Standart</option>
+          <option value="Premium">Premium</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label>Üslup</label>
+        <select id="style">
+          <option>Minimal / Modern</option>
+          <option>Lüks / Sıcak tonlar</option>
+          <option>İskandinav</option>
+          <option>Henüz kararsızım</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <h2>İletişim Bilgileriniz</h2>
+      <div class="grid">
+        <div class="col-6">
+          <label>Ad Soyad</label>
+          <input id="name" placeholder="Adınız Soyadınız" type="text" required/>
+        </div>
+        <div class="col-6">
+          <label>WhatsApp numarası (+994…)</label>
+          <input id="phone" placeholder="+994 55 123 45 67" type="text" required/>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <div class="col-12 est">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+          <div>
+            <div class="mut">Tahmini Bütçe Aralığı</div>
+            <div class="big" id="range">₼—</div>
+            <div class="disclaimer">Bu, ilk tahmindir. Ücretsiz keşif sonrası net fiyat verilecektir.</div>
+          </div>
+          <div class="cta">
+            <button id="submitBtn" class="btn primary" onclick="calculateAndSend()">Fiyatı Hesapla ve Gönder</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.querySelectorAll('.chip').forEach(el => {
+  el.addEventListener('click', () => {
+    el.classList.toggle('active');
+    const cb = el.querySelector('input');
+    cb.checked = !cb.checked;
+  });
+});
+
+function val(id){ return document.getElementById(id).value; }
+function num(id){ return parseFloat(document.getElementById(id).value || 0); }
+
+async function calculateAndSend() {
+  const submitButton = document.getElementById('submitBtn');
+  submitButton.disabled = true;
+  submitButton.textContent = "Gönderiliyor...";
+
+  // 1. Formdan verileri oku
+  const name = val('name');
+  const phone = val('phone');
+  if (!name || !phone) {
+      alert("Lütfen Ad Soyad ve Telefon numarası alanlarını doldurun.");
+      submitButton.disabled = false;
+      submitButton.textContent = "Fiyatı Hesapla ve Gönder";
+      return;
+  }
+
+  const status = val('status');
+  const condition = val('condition');
+  const area = Math.max(20, Math.min(500, num('area')));
+  const rooms = val('rooms');
+  const services = Array.from(document.querySelectorAll('#services input:checked')).map(i => i.value);
+  const tier = val('tier');
+  const style = val('style');
+
+  // 2. Fiyatı hesapla
+  const tierK = { 'Ekonomi': 1.00, 'Standart': 1.25, 'Premium': 1.60 };
+  const condK = { 'Tadilat yapılmamış / White-box': 1.00, 'Kara sıva': 1.15, 'Tamamen tadilatlı (Yenileme)': 0.60 };
+  const design_m2 = { 'Ekonomi': 8, 'Standart': 12, 'Premium': 18 };
+  const fitout_m2 = { 'Ekonomi': 250, 'Standart': 380, 'Premium': 550 };
+  
+  let total = 0;
+  if (services.includes('Tasarım')) total += area * design_m2[tier];
+  if (services.includes('İnşaat / Tadilat')) total += area * fitout_m2[tier] * condK[condition];
+  
+  // Basit mobilya ve kurulum ek maliyetleri (isteğe bağlı)
+  if (services.includes('Mobilya')) total += area * 150 * tierK[tier];
+  if (services.includes('Kurulum')) total += area * 50;
+
+  const min = Math.round(total * 0.9);
+  const max = Math.round(total * 1.15);
+  const range_text = `₼${min.toLocaleString('az-AZ')} – ₼${max.toLocaleString('az-AZ')}`;
+  
+  // 3. Fiyatı ekranda göster
+  document.getElementById('range').textContent = range_text;
+
+  // 4. Verileri n8n'e göndermek için hazırla
+  const dataToSend = {
+    name,
+    phone,
+    status,
+    condition,
+    area,
+    rooms,
+    services: services.join(', ') || '-',
+    tier,
+    style,
+    range_text
+  };
+
+  // !!! DİKKAT: n8n'den kopyaladığın Webhook URL'ini buraya yapıştır !!!
+  const webhookUrl = 'SENİN_N8N_WEBHOOK_URLNİ_BURAYA_YAPIŞTIR';
+
+  // 5. Verileri n8n'e gönder
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    });
+
+    if (response.ok) {
+      alert('Talebiniz başarıyla gönderildi! Sizinle en kısa sürede iletişime geçeceğiz.');
+      submitButton.textContent = "Gönderildi!";
+    } else {
+      throw new Error('Sunucu hatası.');
+    }
+  } catch (error) {
+    console.error('Hata:', error);
+    alert('Bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+    submitButton.disabled = false;
+    submitButton.textContent = "Fiyatı Hesapla ve Gönder";
+  }
+}
+</script>
+</body>
+</html>
